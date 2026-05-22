@@ -550,8 +550,9 @@
     font-size: 0.8rem;
   }
 
-  /* i18n */
+  /* i18n - EN hidden by default, JS switches */
   .lang-hidden { display: none !important; }
+  [data-lang="en"] { display: none; }
 
   /* RESPONSIVE */
   @media (max-width: 768px) {
@@ -571,11 +572,7 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  .hero-left > * { animation: fadeUp 0.7s ease both; }
-  .hero-tag { animation-delay: 0.1s; }
-  .hero h1 { animation-delay: 0.25s; }
-  .hero-desc { animation-delay: 0.4s; }
-  .btn { animation-delay: 0.55s; }
+  .hero-left { animation: fadeUp 0.6s ease forwards; }
 </style>
 </head>
 <body>
@@ -811,14 +808,23 @@
 
 <script>
 function setLang(lang) {
+  // Remove the default CSS hiding of EN spans first
   document.querySelectorAll('[data-lang]').forEach(el => {
-    el.classList.toggle('lang-hidden', el.getAttribute('data-lang') !== lang);
+    const elLang = el.getAttribute('data-lang');
+    if (lang === 'nl') {
+      // NL: show nl, hide en
+      el.style.display = elLang === 'nl' ? '' : 'none';
+    } else {
+      // EN: show en, hide nl
+      el.style.display = elLang === 'en' ? '' : 'none';
+    }
   });
   document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.classList.toggle('active', btn.textContent.trim() === lang.toUpperCase());
   });
 }
-document.addEventListener('DOMContentLoaded', function() { setLang('nl'); });
+// NL is default via CSS [data-lang="en"] { display:none }
+// No JS needed on load - CSS handles it instantly
 </script>
 
 </body>
