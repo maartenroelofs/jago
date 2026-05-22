@@ -551,12 +551,7 @@
   }
 
   /* i18n */
-  [data-lang="en"] { display: none; }
-  body.en [data-lang="nl"] { display: none; }
-  body.en [data-lang="en"] { display: block; }
-  body.en span[data-lang="en"] { display: inline; }
-  body.en span[data-lang="nl"] { display: none; }
-  span[data-lang="en"] { display: none; }
+  .lang-hidden { display: none !important; }
 
   /* RESPONSIVE */
   @media (max-width: 768px) {
@@ -816,11 +811,14 @@
 
 <script>
 function setLang(lang) {
-  document.body.classList.toggle('en', lang === 'en');
+  document.querySelectorAll('[data-lang]').forEach(el => {
+    el.classList.toggle('lang-hidden', el.getAttribute('data-lang') !== lang);
+  });
   document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
+    btn.classList.toggle('active', btn.textContent.trim() === lang.toUpperCase());
   });
 }
+document.addEventListener('DOMContentLoaded', function() { setLang('nl'); });
 </script>
 
 </body>
